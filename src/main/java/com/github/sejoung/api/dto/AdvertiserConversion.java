@@ -69,4 +69,6 @@ public class AdvertiserConversion {
     private String shopId;
     private String pltfomTpCode;
     private String domain;
+    private String frameCode;
+    
 }

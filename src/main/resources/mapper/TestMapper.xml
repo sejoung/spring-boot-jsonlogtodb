@@ -60,6 +60,37 @@
 		'recommend_gateway',
 		now())
 	</insert>
- 	
 	
+	
+ 	<insert id="insertMobCnvrsStats" parameterType="hashmap">
+		INSERT INTO MOB_CNVRS_STATS
+		(STATS_DTTM,
+		PLTFOM_TP_CODE,
+		ADVRTS_PRDT_CODE,
+		ADVRTS_TP_CODE,
+		SITE_CODE,
+		MEDIA_SCRIPT_NO,
+		ADVRTS_RCMD_TP_CODE,
+		ADVRTS_TP_CODE_DETAIL,
+		TOT_EPRS_CNT,
+		CLICK_CNT,
+		ADVRTS_AMT,
+		REG_USER_ID,
+		REG_DTTM)
+		VALUES
+		(#{yyyymmdd},
+		#{pltfom_tp_code},
+		#{advrts_prdt_code},
+		#{advrts_tp_code},
+		#{site_code},
+		#{media_script_no},
+		#{advrts_rcmd_tp_code},
+		#{advrts_tp_code_detail},
+		#{tot_eprs_cnt},
+		#{click_cnt},
+		#{advrts_amt},
+		'recommend_gateway',
+		now())
+	</insert>
+
 </mapper>

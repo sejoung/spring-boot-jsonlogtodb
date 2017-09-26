@@ -20,5 +20,8 @@ public class LoggerFileDao {
         return this.sqlSessionTemplate.insert("insertAdlinkRcdStatusClick", data);
     }
     
+    public int insertMobCnvrsStats(Map<String, Object> data) {
+        return this.sqlSessionTemplate.insert("insertMobCnvrsStats", data);
+    }
     
 }

@@ -127,14 +127,19 @@ public class LoggerFileService {
                     DateTime jodatime = dtf.parseDateTime(conversion.getRegdate());
                     DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyyMMdd");
                     data.put("yyyymmdd", dtfOut.print(jodatime));
-                    data.put("subadgubun", conversion.getSubadgubun());
-                    data.put("ergabtests", conversion.getErgabtests());
-                    data.put("platform", conversion.getPlatform());
-                    data.put("pcode", conversion.getPcode());
-                    data.put("pltfomTpCode", conversion.getPltfomTpCode());
-                    data.put("price", conversion.getPrice());
-                    data.put("adGubun", conversion.getAdGubun());
-
+                    data.put("pltfom_tp_code", conversion.getPltfomTpCode());
+                    data.put("advrts_prdt_code", CommonConstants.BANNER);
+                    data.put("site_code", conversion.getSiteCode());
+                    data.put("media_script_no", conversion.getMediaCode());
+                    data.put("advrts_rcmd_tp_code", conversion.getErgabtests());
+                    data.put("tot_eprs_cnt", 1);
+                    data.put("click_cnt", 0);
+                    data.put("advrts_amt", conversion.getPrice());
+                    data.put("userId", conversion.getUserId());
+                    // data.put("frameCode", conversion.getFrameCode());
+                    data.put("advrts_tp_code", conversion.getAdGubun());
+                    data.put("advrts_tp_code_detail", conversion.getSubadgubun());
+                    //loggerFileDao.insertMobCnvrsStats(data);
                     log.debug("conversion ={}", conversion);
 
                 } else {
