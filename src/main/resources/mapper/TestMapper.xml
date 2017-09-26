@@ -72,9 +72,15 @@
 		MEDIA_SCRIPT_NO,
 		ADVRTS_RCMD_TP_CODE,
 		ADVRTS_TP_CODE_DETAIL,
-		TOT_EPRS_CNT,
-		CLICK_CNT,
-		ADVRTS_AMT,
+		ORDER_NO,
+		CLICK_TP,
+		SESION_SELNG_YN,
+		DIRECT_YN,
+		MOB_ORDER_YN,
+		CNVRS_TP_CODE,
+		ORDER_AMT,
+		ORDER_CNT.
+		ORDER_QY,   
 		REG_USER_ID,
 		REG_DTTM)
 		VALUES
@@ -86,9 +92,15 @@
 		#{media_script_no},
 		#{advrts_rcmd_tp_code},
 		#{advrts_tp_code_detail},
-		#{tot_eprs_cnt},
-		#{click_cnt},
-		#{advrts_amt},
+		#{order_no},
+		#{click_tp},
+		#{sesion_selng_yn},
+		#{direct_yn},
+		#{mob_order_yn},
+		#{cnvrs_tp_code},
+		#{order_amt},
+		#{order_cnt},
+		#{order_qy},
 		'recommend_gateway',
 		now())
 	</insert>

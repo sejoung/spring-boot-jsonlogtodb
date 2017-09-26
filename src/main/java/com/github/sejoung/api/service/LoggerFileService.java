@@ -132,15 +132,25 @@ public class LoggerFileService {
                     data.put("site_code", conversion.getSiteCode());
                     data.put("media_script_no", conversion.getMediaCode());
                     data.put("advrts_rcmd_tp_code", conversion.getErgabtests());
-                    data.put("tot_eprs_cnt", 1);
-                    data.put("click_cnt", 0);
-                    data.put("advrts_amt", conversion.getPrice());
                     data.put("userId", conversion.getUserId());
-                    // data.put("frameCode", conversion.getFrameCode());
+                    data.put("frameCode", conversion.getFrameCode());
                     data.put("advrts_tp_code", conversion.getAdGubun());
                     data.put("advrts_tp_code_detail", conversion.getSubadgubun());
-                    //loggerFileDao.insertMobCnvrsStats(data);
-                    log.debug("conversion ={}", conversion);
+                    data.put("order_amt", conversion.getPrice());
+                    
+                    data.put("order_no", conversion.getOrdCode());
+                    
+                    data.put("click_tp", conversion.getPrice());
+                    data.put("sesion_selng_yn", conversion.getDirect());
+                    
+                    data.put("direct_yn", conversion.getPrice());
+                    data.put("mob_order_yn", conversion.getMobonYn());
+                    data.put("cnvrs_tp_code", conversion.getPrice());
+                    data.put("order_cnt", conversion.getPrice());
+                    data.put("order_qy", conversion.getPrice());
+                    
+                    loggerFileDao.insertMobCnvrsStats(data);
+                    //log.debug("conversion ={}", conversion);
 
                 } else {
                     log.debug("--------------------------------->>>>>>>>>>>>>>>>>>>>>ERROR");
