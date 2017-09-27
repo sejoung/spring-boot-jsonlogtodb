@@ -39,5 +39,14 @@ public class LoggerFileController {
     public void conversion() throws IOException {
         loggerFileService.conversion();
     }
+    
+    
+
+    @ApiOperation(value = "업데이트테스트", notes = "테스트용")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/test", method = RequestMethod.PUT)
+    public void test() {
+        loggerFileService.test();
+    }
 
 }

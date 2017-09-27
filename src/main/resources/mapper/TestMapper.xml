@@ -105,4 +105,9 @@
 		now())
 	</insert>
 
+
+<update id="updatetest" parameterType="hashmap">
+		update test set testcol ='recommend_gateway'
+	</update>
+
 </mapper>

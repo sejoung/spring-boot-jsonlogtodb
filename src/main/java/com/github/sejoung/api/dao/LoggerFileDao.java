@@ -24,4 +24,8 @@ public class LoggerFileDao {
         return this.sqlSessionTemplate.insert("insertMobCnvrsStats", data);
     }
     
+    public int updatetest(Map<String, Object> data) {
+        return this.sqlSessionTemplate.update("updatetest", data);
+    }
+    
 }

@@ -46,6 +46,12 @@ public class LoggerFileService {
         this.filelist("E:\\lowdata\\conversion", CommonConstants.CONVERSION);
     }
 
+    public void test() {
+        Map<String, Object> data = new HashMap<String, Object>();
+
+        loggerFileDao.updatetest(data);
+    }
+
     private void filelist(String filePath, String code) throws IOException {
 
         File f1 = new File(filePath);
@@ -137,20 +143,20 @@ public class LoggerFileService {
                     data.put("advrts_tp_code", conversion.getAdGubun());
                     data.put("advrts_tp_code_detail", conversion.getSubadgubun());
                     data.put("order_amt", conversion.getPrice());
-                    
+
                     data.put("order_no", conversion.getOrdCode());
-                    
+
                     data.put("click_tp", conversion.getPrice());
                     data.put("sesion_selng_yn", conversion.getDirect());
-                    
+
                     data.put("direct_yn", conversion.getPrice());
                     data.put("mob_order_yn", conversion.getMobonYn());
                     data.put("cnvrs_tp_code", conversion.getPrice());
                     data.put("order_cnt", conversion.getPrice());
                     data.put("order_qy", conversion.getPrice());
-                    
+
                     loggerFileDao.insertMobCnvrsStats(data);
-                    //log.debug("conversion ={}", conversion);
+                    // log.debug("conversion ={}", conversion);
 
                 } else {
                     log.debug("--------------------------------->>>>>>>>>>>>>>>>>>>>>ERROR");
