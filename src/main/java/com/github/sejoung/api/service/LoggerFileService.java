@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.sejoung.api.constant.CommonConstants;
 import com.github.sejoung.api.dao.LoggerFileDao;
+import com.github.sejoung.api.dao.RedisDao;
 import com.github.sejoung.api.dto.AdvertiserClick;
 import com.github.sejoung.api.dto.AdvertiserConversion;
 import com.github.sejoung.api.dto.ImpressionClick;
@@ -29,6 +30,9 @@ public class LoggerFileService {
 
     @Autowired
     private LoggerFileDao loggerFileDao;
+    
+    @Autowired
+    private RedisDao redisDao;
 
     @Autowired
     private JsonUtil jsonUtil;
@@ -166,7 +170,16 @@ public class LoggerFileService {
                 } else if(CommonConstants.RFSHOP.equals(code)){
                     AdvertiserClick click = (AdvertiserClick) jsonUtil.parseRequestJson(line, AdvertiserClick.class);
 
-                    
+                    try {
+                        if (CommonConstants.MOBILE.equals(click.getPcMobileGubun())) {
+                            redisDao.createAuidPcodeData("auid:"+click.getAuid(), click.getPcode());
+                            redisDao.createAuidData(click.getAuid());
+                            redisDao.createPcodeData(click.getPcode());
+                        }
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                 
                     log.debug("--------------------------------->>>>>>>>>>>>>>>>>>>>>ERROR");
