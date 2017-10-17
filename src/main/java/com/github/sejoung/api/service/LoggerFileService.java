@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.sejoung.api.constant.CommonConstants;
 import com.github.sejoung.api.dao.LoggerFileDao;
+import com.github.sejoung.api.dto.AdvertiserClick;
 import com.github.sejoung.api.dto.AdvertiserConversion;
 import com.github.sejoung.api.dto.ImpressionClick;
 import com.github.sejoung.api.dto.ImpressionView;
@@ -44,6 +45,10 @@ public class LoggerFileService {
 
     public void conversion() throws IOException {
         this.filelist("E:\\lowdata\\conversion", CommonConstants.CONVERSION);
+    }
+    
+    public void rfshop() throws IOException {
+        this.filelist("E:\\lowdata\\rfshop", CommonConstants.RFSHOP);
     }
 
     public void test() {
@@ -158,7 +163,12 @@ public class LoggerFileService {
                     loggerFileDao.insertMobCnvrsStats(data);
                     // log.debug("conversion ={}", conversion);
 
+                } else if(CommonConstants.RFSHOP.equals(code)){
+                    AdvertiserClick click = (AdvertiserClick) jsonUtil.parseRequestJson(line, AdvertiserClick.class);
+
+                    
                 } else {
+                
                     log.debug("--------------------------------->>>>>>>>>>>>>>>>>>>>>ERROR");
                 }
             }

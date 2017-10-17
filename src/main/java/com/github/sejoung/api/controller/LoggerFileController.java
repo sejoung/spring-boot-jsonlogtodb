@@ -42,6 +42,14 @@ public class LoggerFileController {
     
     
 
+    @ApiOperation(value = "rfshop", notes = "구매 정보 등록을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/rfshop", method = RequestMethod.PUT)
+    public void rfshop() throws IOException {
+        loggerFileService.rfshop();
+    }
+    
+
     @ApiOperation(value = "업데이트테스트", notes = "테스트용")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/test", method = RequestMethod.PUT)
