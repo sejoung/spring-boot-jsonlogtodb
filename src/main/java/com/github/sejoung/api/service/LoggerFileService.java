@@ -2,11 +2,18 @@ package com.github.sejoung.api.service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -30,7 +37,7 @@ public class LoggerFileService {
 
     @Autowired
     private LoggerFileDao loggerFileDao;
-    
+
     @Autowired
     private RedisDao redisDao;
 
@@ -50,9 +57,103 @@ public class LoggerFileService {
     public void conversion() throws IOException {
         this.filelist("E:\\lowdata\\conversion", CommonConstants.CONVERSION);
     }
-    
+
     public void rfshop() throws IOException {
         this.filelist("E:\\lowdata\\rfshop", CommonConstants.RFSHOP);
+    }
+
+    public void auidText() throws Exception {
+
+        PrintWriter pw = new PrintWriter("E:\\\\2개같은상품본것제거.txt");
+        Set<String> st = redisDao.selectAuidData();
+        System.out.println("start");
+
+        for (String key : st) {
+            pw.println(key);
+        }
+
+        pw.close();
+        System.out.println("end");
+
+    }
+
+    public void auidDuplication() throws Exception {
+
+        Set<String> st = redisDao.selectAuidData();
+        System.out.println("start");
+        for (String key : st) {
+            String result = redisDao.selectAuidPcodeDataOne("auid:" + key);
+            int i = result.split(",").length;
+            if (i == 1) {
+                redisDao.deleteAuidPcodeDataOne(key);
+            }
+        }
+        System.out.println("end");
+    }
+
+    public void auidDuplication2() throws Exception {
+
+        Set<String> st = redisDao.selectAuidData();
+        System.out.println("start");
+        int rownum = 0;
+        for (String key : st) {
+            String result = redisDao.selectAuidPcodeDataOne("auid:" + key);
+            String[] s = result.split(",");
+            int cnt = s.length;
+            if (cnt == 2 && s[0].equals(s[1])) {
+                redisDao.deleteAuidPcodeDataOne(key);
+                rownum++;
+            }
+        }
+
+        System.out.println("end " + rownum);
+    }
+
+    public void auidExcel() throws Exception {
+        HSSFWorkbook wb = new HSSFWorkbook();
+        FileOutputStream fos = new FileOutputStream(new File("E:\\CLICK_20171017.xls"));
+        HSSFSheet sheet = wb.createSheet();
+
+        Set<String> st = redisDao.selectAuidData();
+        int rownum = 0;
+
+        System.out.println("start");
+        for (String key : st) {
+            String result = redisDao.selectAuidPcodeDataOne("auid:" + key);
+            String[] s = result.split(",");
+            int cnt = s.length;
+
+            HSSFRow row = sheet.createRow(rownum);
+            HSSFCell keycell = row.createCell(1);
+            keycell.setCellValue(key);
+            HSSFCell cntcell = row.createCell(2);
+            cntcell.setCellValue(cnt);
+            HSSFCell pcodecell = row.createCell(3);
+            pcodecell.setCellValue(result);
+            System.out.println(rownum);
+            rownum++;
+        }
+        wb.write(fos);
+        fos.close();
+        System.out.println("end");
+    }
+
+    public void auidText2() throws Exception {
+        PrintWriter pw = new PrintWriter("E:\\\\2개같은상품본것제거.txt");
+        Set<String> st = redisDao.selectAuidData();
+        int rownum = 0;
+
+        System.out.println("start");
+        for (String key : st) {
+            String result = redisDao.selectAuidPcodeDataOne("auid:" + key);
+            String[] s = result.split(",");
+            int cnt = s.length;
+            pw.println(key + "|" + cnt + "|" + result);
+            System.out.println(rownum);
+            rownum++;
+        }
+        pw.close();
+        System.out.println("end");
     }
 
     public void test() {
@@ -167,21 +268,21 @@ public class LoggerFileService {
                     loggerFileDao.insertMobCnvrsStats(data);
                     // log.debug("conversion ={}", conversion);
 
-                } else if(CommonConstants.RFSHOP.equals(code)){
+                } else if (CommonConstants.RFSHOP.equals(code)) {
                     AdvertiserClick click = (AdvertiserClick) jsonUtil.parseRequestJson(line, AdvertiserClick.class);
 
                     try {
                         if (CommonConstants.MOBILE.equals(click.getPcMobileGubun())) {
-                            redisDao.createAuidPcodeData("auid:"+click.getAuid(), click.getPcode());
+                            redisDao.createAuidPcodeData("auid:" + click.getAuid(), click.getPcode());
                             redisDao.createAuidData(click.getAuid());
                             redisDao.createPcodeData(click.getPcode());
                         }
-                        
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                
+
                     log.debug("--------------------------------->>>>>>>>>>>>>>>>>>>>>ERROR");
                 }
             }

@@ -1,5 +1,6 @@
 package com.github.sejoung.api.dao;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,16 @@ public class RedisDao {
         redisTemplate.expire("pcode", expiretime, TimeUnit.DAYS);
     }
     
+    public Set<String> selectAuidData() throws Exception {
+        return redisTemplate.opsForSet().members("auid");
+    }
     
+    public String selectAuidPcodeDataOne(String key) throws Exception {
+        return redisTemplate.opsForValue().get(key);
+    }
+    
+    public void deleteAuidPcodeDataOne(String key) throws Exception {
+        redisTemplate.delete("auid:"+key);
+        redisTemplate.opsForSet().remove("auid", key);
+    }
 }
