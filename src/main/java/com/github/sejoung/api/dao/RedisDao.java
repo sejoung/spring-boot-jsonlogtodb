@@ -42,11 +42,35 @@ public class RedisDao {
     
     public void createPcodeData(String data) throws Exception {
         redisTemplate.opsForSet().add("pcode", data);
-        redisTemplate.expire("pcode", expiretime, TimeUnit.DAYS);
+    }
+    
+    public void createPcodeData2(String data) throws Exception {
+        redisTemplate.opsForSet().add("pcode2", data);
+    }
+    
+    public void deletePcodeData2(String key) throws Exception {
+        redisTemplate.opsForSet().remove("pcode2", key);
+        redisTemplate.delete("pcode:"+key);
+
+    }
+    public void createPcodeAuidData(String key,String data) throws Exception {
+        redisTemplate.opsForSet().add("pcode:"+key, data);
     }
     
     public Set<String> selectAuidData() throws Exception {
         return redisTemplate.opsForSet().members("auid");
+    }
+    
+    public Set<String> selectPcodeData() throws Exception {
+        return redisTemplate.opsForSet().members("pcode");
+    }
+    
+    public Set<String> selectPcodeData2() throws Exception {
+        return redisTemplate.opsForSet().members("pcode2");
+    }
+    
+    public Set<String> selectPcodeAuidData(String key) throws Exception {
+        return redisTemplate.opsForSet().members("pcode:"+key);
     }
     
     public String selectAuidPcodeDataOne(String key) throws Exception {
@@ -56,5 +80,13 @@ public class RedisDao {
     public void deleteAuidPcodeDataOne(String key) throws Exception {
         redisTemplate.delete("auid:"+key);
         redisTemplate.opsForSet().remove("auid", key);
+    }
+    
+    public void deleteAuidPcodeDataOne2(String key) throws Exception {
+        redisTemplate.delete("auid:"+key);
+    }
+    
+    public void updateAuidPcodeData(String key) throws Exception {
+        redisTemplate.expire("auid:"+key, expiretime, TimeUnit.DAYS);
     }
 }

@@ -79,15 +79,50 @@ public class LoggerFileController {
         loggerFileService.auidExcel();
     }
     
-    @ApiOperation(value = "auidText2", notes = "auidExcel 을 위한 API 입니다.")
+    @ApiOperation(value = "auidText2", notes = "auidText2 을 위한 API 입니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/auidText2", method = RequestMethod.PUT)
     public void auidText2() throws Exception {
         loggerFileService.auidText2();
     }
     
+    @ApiOperation(value = "test11", notes = "test11 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/test11", method = RequestMethod.PUT)
+    public void test11() throws Exception {
+        loggerFileService.test11();
+    }
     
-
+    @ApiOperation(value = "auidDuplication3", notes = "auidDuplication3 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/auidDuplication3", method = RequestMethod.PUT)
+    public void auidDuplication3() throws Exception {
+        loggerFileService.auidDuplication3();
+    }
+    
+    @ApiOperation(value = "auidDuplication4", notes = "auidDuplication4 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/auidDuplication4", method = RequestMethod.PUT)
+    public void auidDuplication4() throws Exception {
+        loggerFileService.auidDuplication4();
+    }
+    
+    @ApiOperation(value = "auidDuplication5", notes = "auidDuplication5 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/auidDuplication5", method = RequestMethod.PUT)
+    public void auidDuplication5() throws Exception {
+        loggerFileService.auidDuplication5();
+    }
+    
+    
+    @ApiOperation(value = "createPcodeData", notes = "createPcodeData 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/createPcodeData", method = RequestMethod.PUT)
+    public void createPcodeData() throws Exception {
+        loggerFileService.createPcodeData();
+    }
+    
+    
     @ApiOperation(value = "업데이트테스트", notes = "테스트용")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/test", method = RequestMethod.PUT)
