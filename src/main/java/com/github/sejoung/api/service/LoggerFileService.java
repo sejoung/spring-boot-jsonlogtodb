@@ -20,6 +20,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.github.sejoung.api.constant.CommonConstants;
@@ -76,6 +77,29 @@ public class LoggerFileService {
 
         pw.close();
         System.out.println("end");
+
+    }
+
+    @Async
+    public void insertPcode(List<String> pcodes, Map<String, Object> data) throws Exception {
+        
+        for (String pcode : pcodes) {
+
+            List<Map<String, Object>> datas = loggerFileDao.selectPcodes(pcode);
+            for (Map<String, Object> map : datas) {
+                map.put("pcode", pcode);
+
+                if ("all".equals(data.get("pltfom_tp_code"))) {
+                    loggerFileDao.insertPcode(map);
+
+                } else if ("01".equals(data.get("pltfom_tp_code"))) {
+                    loggerFileDao.insertWebpcode(map);
+
+                } else if ("02".equals(data.get("pltfom_tp_code"))) {
+                    loggerFileDao.insertMopcode(map);
+                }
+            }
+        }
 
     }
 
@@ -324,9 +348,9 @@ public class LoggerFileService {
 
             while ((line = in.readLine()) != null) {
                 String[] result = line.split(";");
-                String [] pcodes = result[2].split(",");
-                
-                for(String pcode : pcodes) {
+                String[] pcodes = result[2].split(",");
+
+                for (String pcode : pcodes) {
                     redisDao.createPcodeData(pcode);
                 }
             }
@@ -460,12 +484,24 @@ public class LoggerFileService {
                     AdvertiserClick click = (AdvertiserClick) jsonUtil.parseRequestJson(line, AdvertiserClick.class);
 
                     try {
-                        if (CommonConstants.MOBILE.equals(click.getPcMobileGubun())) {
-                            redisDao.createAuidPcodeData("auid:" + click.getAuid(), click.getPcode());
-                            redisDao.createAuidData(click.getAuid());
-                            redisDao.createPcodeData(click.getPcode());
-                        }
+                        Map<String, Object> data = new HashMap<String, Object>();
+                        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+                        DateTime jodatime = dtf.parseDateTime(click.getRegdate());
+                        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyyMMdd");
+                        data.put("yyyymmdd", dtfOut.print(jodatime));
+                        data.put("pltfom_tp_code", click.getPcMobileGubun());
+                        data.put("pcode", click.getPcode());
+                        data.put("auid", click.getAuid());
+                        data.put("regdate", jodatime);
+                        data.put("ip", click.getIp());
+                        loggerFileDao.insertTest(data);
 
+                        /*
+                         * if (CommonConstants.MOBILE.equals(click.getPcMobileGubun())) {
+                         * redisDao.createAuidPcodeData("auid:" + click.getAuid(), click.getPcode());
+                         * redisDao.createAuidData(click.getAuid());
+                         * redisDao.createPcodeData(click.getPcode()); }
+                         */
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

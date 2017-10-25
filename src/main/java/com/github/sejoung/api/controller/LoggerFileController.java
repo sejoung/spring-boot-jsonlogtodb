@@ -1,6 +1,9 @@
 package com.github.sejoung.api.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,16 +12,38 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.sejoung.api.dao.LoggerFileDao;
 import com.github.sejoung.api.service.LoggerFileService;
+import com.google.common.collect.Lists;
 
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class LoggerFileController {
     
+
+    @Autowired
+    private LoggerFileDao loggerFileDao;
+    
     @Autowired
     private LoggerFileService loggerFileService;
-
+    
+    @ApiOperation(value = "insertPcode", notes = "insertPcode 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/insertPcode", method = RequestMethod.PUT)
+    public void insertPcode() throws Exception {
+        
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("pltfom_tp_code", "02");
+        List<String> pcodes = loggerFileDao.selectPcode(data);
+        List<List<String>> lists =  Lists.partition(pcodes, 200);
+     
+        for(List<String> list : lists) {
+            loggerFileService.insertPcode(list,data);
+        }
+        
+    }
+    
     @ApiOperation(value = "광고클릭등록", notes = "광고 클릭정보 등록을 위한 API 입니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/click", method = RequestMethod.PUT)

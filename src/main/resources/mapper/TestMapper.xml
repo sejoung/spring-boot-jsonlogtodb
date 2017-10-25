@@ -104,10 +104,89 @@
 		'recommend_gateway',
 		now())
 	</insert>
+	
+	<insert id="insertTest" parameterType="hashmap">
+		INSERT INTO test
+		(pltfom_tp_code,
+		pcode,
+		auid,
+		ip,
+		regdate,
+		yyyymmdd)
+		VALUES
+		(
+		#{pltfom_tp_code},
+		#{pcode},
+		#{auid},
+		#{ip},
+		#{regdate, typeHandler=org.joda.time.mybatis.handlers.DateTimeTypeHandler},
+		#{yyyymmdd})
+	</insert>
 
 
-<update id="updatetest" parameterType="hashmap">
+	<update id="updatetest" parameterType="hashmap">
 		update test set testcol ='recommend_gateway'
 	</update>
+	
+	<select id="selectPcode" parameterType="hashmap" resultType="string">
+		select pcode from test
+			<if test="pltfom_tp_code != 'all'">
+				where pltfom_tp_code = #{pltfom_tp_code}
+			</if>
+		group by pcode
+	</select>
 
+	<insert id="insertWebpcode" parameterType="hashmap">
+		INSERT INTO webpcode
+		(pcode,
+		pcode1,
+		cnt)
+		VALUES
+		(
+		#{pcode},
+		#{pcode1},
+		#{cnt})
+	</insert>
+
+
+	<insert id="insertPcode" parameterType="hashmap">
+		INSERT INTO pcode
+		(pcode,
+		pcode1,
+		cnt)
+		VALUES
+		(
+		#{pcode},
+		#{pcode1},
+		#{cnt})
+	</insert>
+	
+	
+	<insert id="insertMopcode" parameterType="hashmap">
+		INSERT INTO mopcode
+		(pcode,
+		pcode1,
+		cnt)
+		VALUES
+		(
+		#{pcode},
+		#{pcode1},
+		#{cnt})
+	</insert>
+	
+	
+	 <select id="selectPcodes" parameterType="string" resultType="hashmap">
+		SELECT pcode1, cnt FROM (
+			SELECT  AA.pcode as pcode1
+			       ,COUNT(*) AS cnt
+			FROM   test AA
+			INNER JOIN (select  auid
+			            from    test
+			            where pcode = #{pcode}
+			            group by auid) BB ON (BB.auid = AA.auid)
+			GROUP BY AA.pcode
+		) AA
+	</select>
+	
+	
 </mapper>

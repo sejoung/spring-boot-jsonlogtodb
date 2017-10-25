@@ -1,5 +1,6 @@
 package com.github.sejoung.api.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -26,6 +27,31 @@ public class LoggerFileDao {
     
     public int updatetest(Map<String, Object> data) {
         return this.sqlSessionTemplate.update("updatetest", data);
+    }
+    public int insertTest(Map<String, Object> data) {
+        return this.sqlSessionTemplate.insert("insertTest", data);
+    }
+    
+    public int insertWebpcode(Map<String, Object> data) {
+        return this.sqlSessionTemplate.insert("insertWebpcode", data);
+    }
+    
+    public int insertPcode(Map<String, Object> data) {
+        return this.sqlSessionTemplate.insert("insertPcode", data);
+    }
+    
+    public int insertMopcode(Map<String, Object> data) {
+        return this.sqlSessionTemplate.insert("insertMopcode", data);
+    }
+    
+    public List<String> selectPcode(Map<String, Object> data) {
+        return this.sqlSessionTemplate.selectList("selectPcode", data);
+
+    }
+    
+    public List<Map<String,Object>> selectPcodes(String data) {
+        return this.sqlSessionTemplate.selectList("selectPcodes", data);
+
     }
     
 }
