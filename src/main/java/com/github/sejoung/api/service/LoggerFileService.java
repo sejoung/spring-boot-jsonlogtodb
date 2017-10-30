@@ -47,6 +47,11 @@ public class LoggerFileService {
     @Autowired
     private JsonUtil jsonUtil;
 
+    
+    public void test12321321312() {
+        log.debug(loggerFileDao.selectTest().toString());
+    }
+    
     public void click() throws IOException {
         this.filelist("E:\\lowdata\\drc", CommonConstants.CLICK);
     }

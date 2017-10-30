@@ -188,5 +188,8 @@
 		) AA
 	</select>
 	
+	<select id="selectTest" parameterType="string" resultType="com.github.sejoung.api.test.Test">
+		SELECT 'true' as test from dual
+	</select>
 	
 </mapper>

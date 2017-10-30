@@ -17,6 +17,7 @@ import com.github.sejoung.api.service.LoggerFileService;
 import com.google.common.collect.Lists;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 public class LoggerFileController {
@@ -27,6 +28,15 @@ public class LoggerFileController {
     
     @Autowired
     private LoggerFileService loggerFileService;
+    
+    
+    @ApiOperation(value = "test12321321312", notes = "test12321321312 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/test12321321312", method = RequestMethod.PUT)
+    public void test12321321312() throws Exception {
+        loggerFileService.test12321321312();
+        
+    }
     
     @ApiOperation(value = "insertPcode", notes = "insertPcode 을 위한 API 입니다.")
     @ResponseStatus(HttpStatus.CREATED)

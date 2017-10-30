@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.github.sejoung.api.test.Test;
+
 @Repository
 public class LoggerFileDao {
 
@@ -53,5 +55,12 @@ public class LoggerFileDao {
         return this.sqlSessionTemplate.selectList("selectPcodes", data);
 
     }
+    
+    public Test selectTest() {
+        return this.sqlSessionTemplate.selectOne("selectTest");
+
+    }
+    
+    
     
 }
