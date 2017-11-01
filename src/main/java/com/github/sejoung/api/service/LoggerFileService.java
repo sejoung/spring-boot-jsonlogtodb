@@ -47,11 +47,10 @@ public class LoggerFileService {
     @Autowired
     private JsonUtil jsonUtil;
 
-    
     public void test12321321312() {
         log.debug(loggerFileDao.selectTest().toString());
     }
-    
+
     public void click() throws IOException {
         this.filelist("E:\\lowdata\\drc", CommonConstants.CLICK);
     }
@@ -66,8 +65,12 @@ public class LoggerFileService {
         this.filelist("E:\\lowdata\\conversion", CommonConstants.CONVERSION);
     }
 
-    public void rfshop() throws IOException {
-        this.filelist("E:\\lowdata\\rfshop", CommonConstants.RFSHOP);
+    @Async
+    public void rfshop(List<String> list) throws IOException {
+        for (String filePath : list) {
+            this.writerfile(filePath, CommonConstants.RFSHOP);
+        }
+
     }
 
     public void auidText() throws Exception {
@@ -87,7 +90,7 @@ public class LoggerFileService {
 
     @Async
     public void insertPcode(List<String> pcodes, Map<String, Object> data) throws Exception {
-        
+
         for (String pcode : pcodes) {
 
             List<Map<String, Object>> datas = loggerFileDao.selectPcodes(pcode);
@@ -379,7 +382,28 @@ public class LoggerFileService {
         loggerFileDao.updatetest(data);
     }
 
-    private void filelist(String filePath, String code) throws IOException {
+    public List<String> filelist(String filePath, String code) throws IOException {
+
+        File f1 = new File(filePath);
+        String[] list = f1.list();
+
+        List<String> pathData = new ArrayList<String>();
+
+        for (int i = 0; i < list.length; i++) {
+            File f2 = new File(filePath, list[i]);
+
+            if (f2.isDirectory()) {
+                this.filelist(f2.getCanonicalPath(), code);
+            } else {
+                // this.writerfile(f2.getCanonicalPath(), f2.getName(), code);
+                pathData.add(f2.getCanonicalPath());
+            }
+        }
+
+        return pathData;
+    }
+
+    public void filelist(String filePath, List<String> pathData) throws IOException {
 
         File f1 = new File(filePath);
         String[] list = f1.list();
@@ -388,14 +412,15 @@ public class LoggerFileService {
             File f2 = new File(filePath, list[i]);
 
             if (f2.isDirectory()) {
-                this.filelist(f2.getCanonicalPath(), code);
+                this.filelist(f2.getCanonicalPath(), pathData);
             } else {
-                this.writerfile(f2.getCanonicalPath(), f2.getName(), code);
+                pathData.add(f2.getCanonicalPath());
             }
         }
+
     }
 
-    private void writerfile(String filePath, String fileName, String code) throws IOException {
+    private void writerfile(String filePath, String code) throws IOException {
 
         BufferedReader in = null;
         try {
@@ -481,7 +506,7 @@ public class LoggerFileService {
                     data.put("cnvrs_tp_code", conversion.getPrice());
                     data.put("order_cnt", conversion.getPrice());
                     data.put("order_qy", conversion.getPrice());
-
+              
                     loggerFileDao.insertMobCnvrsStats(data);
                     // log.debug("conversion ={}", conversion);
 
@@ -499,7 +524,10 @@ public class LoggerFileService {
                         data.put("auid", click.getAuid());
                         data.put("regdate", jodatime);
                         data.put("ip", click.getIp());
-                        loggerFileDao.insertTest(data);
+                        if("dabagirl".equals(click.getUserId())){
+                            loggerFileDao.insertTest(data);
+                        }
+        
 
                         /*
                          * if (CommonConstants.MOBILE.equals(click.getPcMobileGubun())) {
