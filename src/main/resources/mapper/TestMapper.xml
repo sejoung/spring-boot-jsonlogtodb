@@ -29,7 +29,7 @@
 		'recommend_gateway',
 		now())
 	</insert>
-	
+
 	<insert id="insertAdlinkRcdStatusView" parameterType="hashmap">
 		INSERT INTO ADLINK_RCD_STATUS
 		(STATS_DTTM,
@@ -60,9 +60,9 @@
 		'recommend_gateway',
 		now())
 	</insert>
-	
-	
- 	<insert id="insertMobCnvrsStats" parameterType="hashmap">
+
+
+	<insert id="insertMobCnvrsStats" parameterType="hashmap">
 		INSERT INTO MOB_CNVRS_STATS
 		(STATS_DTTM,
 		PLTFOM_TP_CODE,
@@ -80,7 +80,7 @@
 		CNVRS_TP_CODE,
 		ORDER_AMT,
 		ORDER_CNT.
-		ORDER_QY,   
+		ORDER_QY,
 		REG_USER_ID,
 		REG_DTTM)
 		VALUES
@@ -104,7 +104,7 @@
 		'recommend_gateway',
 		now())
 	</insert>
-	
+
 	<insert id="insertTest" parameterType="hashmap">
 		INSERT INTO test
 		(pltfom_tp_code,
@@ -127,12 +127,12 @@
 	<update id="updatetest" parameterType="hashmap">
 		update test set testcol ='recommend_gateway'
 	</update>
-	
+
 	<select id="selectPcode" parameterType="hashmap" resultType="string">
 		select pcode from test
-			<if test="pltfom_tp_code != 'all'">
-				where pltfom_tp_code = #{pltfom_tp_code}
-			</if>
+		<if test="pltfom_tp_code != 'all'">
+			where pltfom_tp_code = #{pltfom_tp_code}
+		</if>
 		group by pcode
 	</select>
 
@@ -160,8 +160,8 @@
 		#{pcode1},
 		#{cnt})
 	</insert>
-	
-	
+
+
 	<insert id="insertMopcode" parameterType="hashmap">
 		INSERT INTO mopcode
 		(pcode,
@@ -173,23 +173,42 @@
 		#{pcode1},
 		#{cnt})
 	</insert>
-	
-	
-	 <select id="selectPcodes" parameterType="string" resultType="hashmap">
+
+	<insert id="insertPcodeRank" parameterType="hashmap">
+		INSERT INTO pcoderank
+		(pcode,
+		pcode1,
+		cnt,rn)
+		VALUES
+		(
+		#{pcode},
+		#{pcode1},
+		#{cnt},
+		#{rn})
+	</insert>
+	<select id="selectPcodes" parameterType="string" resultType="hashmap">
 		SELECT pcode1, cnt FROM (
-			SELECT  AA.pcode as pcode1
-			       ,COUNT(*) AS cnt
-			FROM   test AA
-			INNER JOIN (select  auid
-			            from    test
-			            where pcode = #{pcode}
-			            group by auid) BB ON (BB.auid = AA.auid)
-			GROUP BY AA.pcode
+		SELECT AA.pcode as pcode1
+		,COUNT(*) AS cnt
+		FROM test AA
+		INNER JOIN (select auid
+		from test
+		where pcode = #{pcode}
+		group by auid) BB ON (BB.auid = AA.auid)
+		GROUP BY AA.pcode
 		) AA
 	</select>
-	
+
+	<select id="selectPcodeRank" parameterType="string" resultType="hashmap">
+		select * from (
+		select pcode, pcode1, cnt, row_number() OVER (ORDER BY cnt desc) AS rn FROM test.pcode
+		where pcode = #{pcode}
+		) AA where rn BETWEEN 1 and 4
+		order by rn
+	</select>
+
 	<select id="selectTest" parameterType="string" resultType="com.github.sejoung.api.test.Test">
 		SELECT 'true' as test from dual
 	</select>
-	
+
 </mapper>

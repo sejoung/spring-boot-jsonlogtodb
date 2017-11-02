@@ -51,6 +51,23 @@ public class LoggerFileController {
         }
 
     }
+    
+    
+    @ApiOperation(value = "insertPcodeRank", notes = "insertPcode 을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/insertPcodeRank", method = RequestMethod.PUT)
+    public void insertPcodeRank() throws Exception {
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("pltfom_tp_code", "all");
+        List<String> pcodes = loggerFileDao.selectPcode(data);
+        List<List<String>> lists = Lists.partition(pcodes, 200);
+
+        for (List<String> list : lists) {
+            loggerFileService.insertPcodeRank(list, data);
+        }
+
+    }
 
     @ApiOperation(value = "광고클릭등록", notes = "광고 클릭정보 등록을 위한 API 입니다.")
     @ResponseStatus(HttpStatus.CREATED)

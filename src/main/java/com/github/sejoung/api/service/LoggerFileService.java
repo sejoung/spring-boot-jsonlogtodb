@@ -111,6 +111,21 @@ public class LoggerFileService {
 
     }
 
+    @Async
+    public void insertPcodeRank(List<String> pcodes, Map<String, Object> data) throws Exception {
+
+        for (String pcode : pcodes) {
+
+            List<Map<String, Object>> datas = loggerFileDao.selectPcodeRank(pcode);
+            for (Map<String, Object> map : datas) {
+
+                loggerFileDao.insertPcodeRank(map);
+
+            }
+        }
+
+    }
+
     public void auidDuplication() throws Exception {
 
         Set<String> st = redisDao.selectAuidData();
@@ -506,7 +521,7 @@ public class LoggerFileService {
                     data.put("cnvrs_tp_code", conversion.getPrice());
                     data.put("order_cnt", conversion.getPrice());
                     data.put("order_qy", conversion.getPrice());
-              
+
                     loggerFileDao.insertMobCnvrsStats(data);
                     // log.debug("conversion ={}", conversion);
 
@@ -524,10 +539,9 @@ public class LoggerFileService {
                         data.put("auid", click.getAuid());
                         data.put("regdate", jodatime);
                         data.put("ip", click.getIp());
-                        if("dabagirl".equals(click.getUserId())){
+                        if ("dabagirl".equals(click.getUserId())) {
                             loggerFileDao.insertTest(data);
                         }
-        
 
                         /*
                          * if (CommonConstants.MOBILE.equals(click.getPcMobileGubun())) {

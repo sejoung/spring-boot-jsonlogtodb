@@ -46,6 +46,12 @@ public class LoggerFileDao {
         return this.sqlSessionTemplate.insert("insertMopcode", data);
     }
     
+    
+    public int insertPcodeRank(Map<String, Object> data) {
+        return this.sqlSessionTemplate.insert("insertPcodeRank", data);
+    }
+    
+    
     public List<String> selectPcode(Map<String, Object> data) {
         return this.sqlSessionTemplate.selectList("selectPcode", data);
 
@@ -61,6 +67,9 @@ public class LoggerFileDao {
 
     }
     
+    public List<Map<String,Object>> selectPcodeRank(String data) {
+        return this.sqlSessionTemplate.selectList("selectPcodeRank", data);
+    }
     
     
 }
