@@ -87,7 +87,31 @@ public class LoggerFileController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/conversion", method = RequestMethod.PUT)
     public void conversion() throws IOException {
-        loggerFileService.conversion();
+       // loggerFileService.conversion();
+        
+        List<String> pathData = new ArrayList<String>();
+
+        loggerFileService.filelist("E:\\lowdata\\conversion", pathData);
+        List<List<String>> lists = Lists.partition(pathData, 48);
+
+        for (List<String> list : lists) {
+            loggerFileService.conversion(list);
+        }
+    }
+    
+    @ApiOperation(value = "구매정보등록RAW", notes = "구매 정보 등록을 위한 API 입니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/conversionraw", method = RequestMethod.PUT)
+    public void conversionraw() throws IOException {
+        
+        List<String> pathData = new ArrayList<String>();
+
+        loggerFileService.filelist("E:\\lowdata\\conversion", pathData);
+        List<List<String>> lists = Lists.partition(pathData, 48);
+
+        for (List<String> list : lists) {
+            loggerFileService.conversionraw(list);
+        }
     }
 
     @ApiOperation(value = "rfshop", notes = "rfshop을 위한 API 입니다.")

@@ -66,6 +66,23 @@ public class LoggerFileService {
     }
 
     @Async
+    public void conversionraw(List<String> list) throws IOException {
+        for (String filePath : list) {
+            this.writerfile(filePath, CommonConstants.CONVERSIONRAW);
+        }
+
+    }
+    
+    @Async
+    public void conversion(List<String> list) throws IOException {
+        for (String filePath : list) {
+            this.writerfile(filePath, CommonConstants.CONVERSION);
+        }
+
+    }
+    
+    
+    @Async
     public void rfshop(List<String> list) throws IOException {
         for (String filePath : list) {
             this.writerfile(filePath, CommonConstants.RFSHOP);
@@ -552,6 +569,22 @@ public class LoggerFileService {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else if (CommonConstants.CONVERSIONRAW.equals(code)) {
+                    AdvertiserConversion conversion = (AdvertiserConversion) jsonUtil.parseRequestJson(line, AdvertiserConversion.class);
+                    Map<String, Object> data = new HashMap<String, Object>();
+                    DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+                    DateTime jodatime = dtf.parseDateTime(conversion.getRegdate());
+                    DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyyMMdd");
+                    data.put("yyyymmdd", dtfOut.print(jodatime));
+                    data.put("pltfom_tp_code", conversion.getPltfomTpCode());
+                    data.put("pcode", conversion.getPcode());
+                    data.put("auid", conversion.getAuid());
+                    data.put("regdate", jodatime);
+                    data.put("ip", conversion.getIp());
+                    if ("dabagirl".equals(conversion.getUserId())) {
+                        loggerFileDao.insertTest(data);
+                    }
+
                 } else {
 
                     log.debug("--------------------------------->>>>>>>>>>>>>>>>>>>>>ERROR");

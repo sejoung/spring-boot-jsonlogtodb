@@ -17,6 +17,8 @@ public class CommonConstants {
     public final static String CLICK ="DRC";
     public final static String VIEW ="VIEW";
     public final static String CONVERSION ="CONVERSION";
+    public final static String CONVERSIONRAW ="CONVERSIONRAW";
+
     public final static String RFSHOP ="RFSHOP";
 
 }
